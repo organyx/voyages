@@ -1,6 +1,6 @@
 # Fullstack code challenge
 
-The task of this code challenge is to add functionality described below to this existing sample application: https://github.com/dfds-frontend/fs-dev-challenge. The application is built using NextJS, Typescript, Prisma, React Query Tailwind, zod and https://ui.shadcn.com/ for ready-made components. It is expected that you will complete the below tasks using the technologies listed.
+The task of this code challenge is to add functionality described below to this existing sample application: https://github.com/dfds-frontend/fullstack-dev-challenge. The application is built using NextJS, Typescript, Prisma, React Query Tailwind, zod and https://ui.shadcn.com/ for ready-made components. It is expected that you will complete the below tasks using the technologies listed.
 
 The challenge consists of a variety of frontend, backend and data modeling tasks. We invite you to tailor your implementation as close to the description as possible, otherwise be sure to document deviations if any. 
 
