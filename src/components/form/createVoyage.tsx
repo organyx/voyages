@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '../ui/form'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { type Vessel } from '@prisma/client'
 import { fetchData } from '~/utils'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select'
@@ -39,6 +39,33 @@ export function VoyageForm({ setIsSheetOpen }: VoyageFormProps) {
     },
   })
 
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    async (voyage: FormValues) => {
+      const response = await fetch(`/api/voyage/add`, {
+        method: "POST",
+        body: JSON.stringify(voyage),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add a new voyage");
+      }
+    },
+    {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(["voyages"]);
+        toast({
+          title: "Success",
+          description: 'Voyage added successfully',
+          className: "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4 bg-green-500 text-white",
+        })
+      },
+    }
+  );
+
   function onSubmit(data: FormValues) {
     console.log(data)
 
@@ -54,6 +81,14 @@ export function VoyageForm({ setIsSheetOpen }: VoyageFormProps) {
       })
       return
     }
+
+    mutation.mutate({
+      scheduledDeparture: data.scheduledDeparture,
+      scheduledArrival: data.scheduledArrival,
+      portOfLoading: data.portOfLoading,
+      portOfDischarge: data.portOfDischarge,
+      vesselId: data.vesselId,
+    });
 
     setIsSheetOpen(false)
   }
