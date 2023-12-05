@@ -37,6 +37,19 @@ export function VoyageForm() {
 
   function onSubmit(data: FormValues) {
     console.log(data)
+
+    if (new Date(data.scheduledDeparture) > new Date(data.scheduledArrival)) {
+      form.setError('scheduledDeparture', {
+        type: 'manual',
+        message: 'Departure should be before arrival'
+      })
+      toast({
+        title: "Failed to add a new voyage",
+        description: 'Departure should be before arrival',
+        className: "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4 bg-red-500 text-white",
+      })
+      return
+    }
   }
 
   return (
