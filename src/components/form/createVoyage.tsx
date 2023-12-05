@@ -1,14 +1,15 @@
-import { useForm } from 'react-hook-form'
+import { FieldErrors, useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '../ui/form'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { type Vessel } from '@prisma/client'
+import { type UnitType, type Vessel } from '@prisma/client'
 import { fetchData } from '~/utils'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select'
 import { toast } from '../ui/use-toast'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
 
 
 const formSchema = z.object({
@@ -17,6 +18,7 @@ const formSchema = z.object({
   portOfLoading: z.string({ required_error: 'Port of loading is required' }).min(3).max(50),
   portOfDischarge: z.string({ required_error: 'Port of discharge is required' }).min(3).max(50),
   vesselId: z.string({ required_error: 'Vessel is required' }).min(3, { message: 'Vessel is required' }).max(50),
+  unitTypes: z.array(z.string()).min(5, { message: 'At least 5 unit type are required' }),
 })
 
 type VoyageFormProps = {
@@ -30,12 +32,15 @@ export function VoyageForm({ setIsSheetOpen }: VoyageFormProps) {
     fetchData("vessel/getAll")
   );
 
+  const { data: unitTypes } = useQuery<UnitType[]>(['unitTypes'], () => fetchData('unitType/getAll'))
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       portOfLoading: '',
       portOfDischarge: '',
       vesselId: '',
+      unitTypes: []
     },
   })
 
@@ -63,6 +68,14 @@ export function VoyageForm({ setIsSheetOpen }: VoyageFormProps) {
           className: "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4 bg-green-500 text-white",
         })
       },
+      onError: (error: Error) => {
+        console.error(error);
+        toast({
+          title: "Failed to add a new voyage",
+          description: error.message,
+          className: "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4 bg-red-500 text-white",
+        });
+      },
     }
   );
 
@@ -88,14 +101,19 @@ export function VoyageForm({ setIsSheetOpen }: VoyageFormProps) {
       portOfLoading: data.portOfLoading,
       portOfDischarge: data.portOfDischarge,
       vesselId: data.vesselId,
+      unitTypes: data.unitTypes
     });
 
     setIsSheetOpen(false)
   }
 
+  function onError(errors: FieldErrors<FormValues>) {
+    console.error(errors)
+  }
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-8">
         <FormField
           control={form.control}
           name="scheduledDeparture"
@@ -189,6 +207,35 @@ export function VoyageForm({ setIsSheetOpen }: VoyageFormProps) {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="unitTypes"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Unit Types</FormLabel>
+              <FormControl >
+                <DropdownMenu>
+                  <DropdownMenuTrigger className='flex h-9 items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 w-[180px]'>Select Unit</DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>Unit Types</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {unitTypes?.map((unitType) => (
+                      <DropdownMenuItem key={unitType.id} onClick={() => {
+                        const unitTypes = field.value
+                        unitTypes.push(unitType.id)
+                        field.onChange(unitTypes)
+                      }}>
+                        {unitType.name}
+                      </DropdownMenuItem>
+                    )
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </FormControl>
+              <FormDescription>Unit types</FormDescription>
+            </FormItem>
+          )} />
 
         <Button type='submit'>Submit</Button>
       </form>
