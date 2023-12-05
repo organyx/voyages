@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "./ui/sheet";
 import { Button } from "./ui/button";
+import { VoyageForm } from "./form/createVoyage";
 
 type Props = {
   children: ReactNode;
@@ -23,7 +24,7 @@ export default function Layout({ children }: Props) {
               <SheetHeader>
                 Create Voyage
               </SheetHeader>
-              <p>Form</p>
+              <VoyageForm />
             </SheetContent>
           </Sheet>
         </div>
