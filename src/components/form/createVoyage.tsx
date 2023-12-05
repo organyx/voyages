@@ -4,6 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '../ui/form'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
+import { useQuery } from '@tanstack/react-query'
+import { type Vessel } from '@prisma/client'
+import { fetchData } from '~/utils'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select'
+import { toast } from '../ui/use-toast'
 
 
 const formSchema = z.object({
@@ -16,6 +21,11 @@ const formSchema = z.object({
 
 export function VoyageForm() {
   type FormValues = z.infer<typeof formSchema>
+
+  const { data: vessels } = useQuery<Vessel[]>(["vessels"], () =>
+    fetchData("vessel/getAll")
+  );
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -91,6 +101,36 @@ export function VoyageForm() {
               </FormControl>
               <FormDescription>
                 Port of discharge
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="vesselId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Vessel</FormLabel>
+              <FormControl>
+                <Select onValueChange={field.onChange} defaultValue={field.value} required>
+                  <SelectTrigger className='w-[180px]'>
+                    <SelectValue placeholder="Select a vessel" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Vessels</SelectLabel>
+                      {vessels?.map((vessel) => (
+                        <SelectItem key={vessel.id} value={vessel.id}>
+                          {vessel.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormDescription>
+                Vessel
               </FormDescription>
             </FormItem>
           )}
