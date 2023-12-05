@@ -4,6 +4,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "./ui/sheet";
 import { Button } from "./ui/button";
 import { VoyageForm } from "./form/createVoyage";
+import { Toaster } from "./ui/toaster";
 
 type Props = {
   children: ReactNode;
@@ -34,6 +35,7 @@ export default function Layout({ children }: Props) {
           {children}
         </NextThemesProvider>
       </main>
+      <Toaster />
     </>
   );
 }
