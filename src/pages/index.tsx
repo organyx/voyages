@@ -16,6 +16,7 @@ import { Button } from "~/components/ui/button";
 import { TABLE_DATE_FORMAT } from "~/constants";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { Badge } from "~/components/ui/badge";
+import { toast } from "~/components/ui/use-toast";
 
 export default function Home() {
   const { data: voyages } = useQuery<ReturnType>(["voyages"], () =>
@@ -36,6 +37,15 @@ export default function Home() {
     {
       onSuccess: async () => {
         await queryClient.invalidateQueries(["voyages"]);
+      },
+
+      onError: (error: Error) => {
+        console.error(error);
+        toast({
+          title: "Failed to delete the voyage",
+          description: error.message,
+          className: "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4 bg-red-500 text-white",
+        });
       },
     }
   );
