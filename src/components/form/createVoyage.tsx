@@ -9,6 +9,7 @@ import { type UnitType, type Vessel } from '@prisma/client'
 import { fetchData } from '~/utils'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select'
 import { toast } from '../ui/use-toast'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
 
 
 const formSchema = z.object({
@@ -206,6 +207,35 @@ export function VoyageForm({ setIsSheetOpen }: VoyageFormProps) {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="unitTypes"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Unit Types</FormLabel>
+              <FormControl >
+                <DropdownMenu>
+                  <DropdownMenuTrigger className='flex h-9 items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 w-[180px]'>Select Unit</DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>Unit Types</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {unitTypes?.map((unitType) => (
+                      <DropdownMenuItem key={unitType.id} onClick={() => {
+                        const unitTypes = field.value
+                        unitTypes.push(unitType.id)
+                        field.onChange(unitTypes)
+                      }}>
+                        {unitType.name}
+                      </DropdownMenuItem>
+                    )
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </FormControl>
+              <FormDescription>Unit types</FormDescription>
+            </FormItem>
+          )} />
 
         <Button type='submit'>Submit</Button>
       </form>
