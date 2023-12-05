@@ -14,6 +14,8 @@ import { fetchData } from "~/utils";
 import type { ReturnType } from "./api/voyage/getAll";
 import { Button } from "~/components/ui/button";
 import { TABLE_DATE_FORMAT } from "~/constants";
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
+import { Badge } from "~/components/ui/badge";
 
 export default function Home() {
   const { data: voyages } = useQuery<ReturnType>(["voyages"], () =>
@@ -57,6 +59,7 @@ export default function Home() {
               <TableHead>Port of loading</TableHead>
               <TableHead>Port of discharge</TableHead>
               <TableHead>Vessel</TableHead>
+              <TableHead>Unit Types</TableHead>
               <TableHead>&nbsp;</TableHead>
             </TableRow>
           </TableHeader>
@@ -75,6 +78,18 @@ export default function Home() {
                 <TableCell>{voyage.portOfLoading}</TableCell>
                 <TableCell>{voyage.portOfDischarge}</TableCell>
                 <TableCell>{voyage.vessel.name}</TableCell>
+                <TableCell>
+                  <Popover>
+                    <PopoverTrigger><Badge>{voyage.units.length}</Badge></PopoverTrigger>
+                    <PopoverContent>
+                      <ul>
+                        {voyage.units.map(unit =>
+                          <li key={unit.id}>{unit.name} ({unit.defaultLength})</li>
+                        )}
+                      </ul>
+                    </PopoverContent>
+                  </Popover>
+                </TableCell>
                 <TableCell>
                   <Button
                     onClick={() => handleDelete(voyage.id)}
