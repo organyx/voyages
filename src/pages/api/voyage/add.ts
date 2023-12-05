@@ -15,6 +15,7 @@ const handler: NextApiHandler = async (
       scheduledArrival,
       portOfLoading,
       portOfDischarge,
+      unitTypes,
     } = req.body;
 
     const newVoyage = await prisma.voyage.create({
@@ -24,6 +25,11 @@ const handler: NextApiHandler = async (
         portOfLoading,
         scheduledArrival: new Date(scheduledArrival),
         scheduledDeparture: new Date(scheduledDeparture),
+        units: {
+          connect: unitTypes.map((unitTypeId: string) => ({
+            id: unitTypeId,
+          })),
+        },
       },
     });
 
