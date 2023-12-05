@@ -19,7 +19,11 @@ const formSchema = z.object({
   vesselId: z.string({ required_error: 'Vessel is required' }).min(3, { message: 'Vessel is required' }).max(50),
 })
 
-export function VoyageForm() {
+type VoyageFormProps = {
+  setIsSheetOpen: (isOpen: boolean) => void
+}
+
+export function VoyageForm({ setIsSheetOpen }: VoyageFormProps) {
   type FormValues = z.infer<typeof formSchema>
 
   const { data: vessels } = useQuery<Vessel[]>(["vessels"], () =>
@@ -50,6 +54,8 @@ export function VoyageForm() {
       })
       return
     }
+
+    setIsSheetOpen(false)
   }
 
   return (
