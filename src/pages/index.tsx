@@ -5,7 +5,9 @@ import Layout from "~/components/layout";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -61,34 +63,35 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <Table>
+        <Table aria-describedby="tableDesc" aria-labelledby="tableTitle">
+          <TableCaption id="tableTitle" className="caption-top">Voyages</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead>Departure</TableHead>
-              <TableHead>Arrival</TableHead>
-              <TableHead>Port of loading</TableHead>
-              <TableHead>Port of discharge</TableHead>
-              <TableHead>Vessel</TableHead>
-              <TableHead>Unit Types</TableHead>
-              <TableHead>&nbsp;</TableHead>
+              <TableHead scope="col">Departure</TableHead>
+              <TableHead scope="col">Arrival</TableHead>
+              <TableHead scope="col">Port of loading</TableHead>
+              <TableHead scope="col">Port of discharge</TableHead>
+              <TableHead scope="col">Vessel</TableHead>
+              <TableHead scope="col">Unit Types</TableHead>
+              <TableHead scope="col">&nbsp;</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {voyages?.map((voyage) => (
               <TableRow key={voyage.id}>
-                <TableCell>
+                <TableCell headers="departure">
                   {format(
                     new Date(voyage.scheduledDeparture),
                     TABLE_DATE_FORMAT
                   )}
                 </TableCell>
-                <TableCell>
+                <TableCell headers="arrival">
                   {format(new Date(voyage.scheduledArrival), TABLE_DATE_FORMAT)}
                 </TableCell>
-                <TableCell>{voyage.portOfLoading}</TableCell>
-                <TableCell>{voyage.portOfDischarge}</TableCell>
-                <TableCell>{voyage.vessel.name}</TableCell>
-                <TableCell>
+                <TableCell headers="portOfLoading">{voyage.portOfLoading}</TableCell>
+                <TableCell headers="portOfDischarge">{voyage.portOfDischarge}</TableCell>
+                <TableCell headers="vessel">{voyage.vessel.name}</TableCell>
+                <TableCell headers="unitTypes">
                   <Popover>
                     <PopoverTrigger><Badge>{voyage.units.length}</Badge></PopoverTrigger>
                     <PopoverContent>
@@ -100,7 +103,7 @@ export default function Home() {
                     </PopoverContent>
                   </Popover>
                 </TableCell>
-                <TableCell>
+                <TableCell headers="delete">
                   <Button
                     onClick={() => handleDelete(voyage.id)}
                     variant="outline"
@@ -110,7 +113,15 @@ export default function Home() {
                 </TableCell>
               </TableRow>
             ))}
+
           </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={7} id="tableDesc">
+                A table of voyages
+              </TableCell>
+            </TableRow>
+          </TableFooter>
         </Table>
       </Layout>
     </>
