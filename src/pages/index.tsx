@@ -11,15 +11,15 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { fetchData } from "~/utils";
-import type { ReturnType } from "./api/voyage/getAll";
 import { Button } from "~/components/ui/button";
 import { TABLE_DATE_FORMAT } from "~/constants";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { Badge } from "~/components/ui/badge";
 import { toast } from "~/components/ui/use-toast";
+import { type VoyageWithVessel } from "~/server/voyage";
 
 export default function Home() {
-  const { data: voyages } = useQuery<ReturnType>(["voyages"], () =>
+  const { data: voyages } = useQuery<VoyageWithVessel[]>(["voyages"], () =>
     fetchData("voyage/getAll")
   );
 
