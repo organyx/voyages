@@ -1,7 +1,6 @@
 import { createMocks } from "node-mocks-http";
 import deleteHandler from "./delete";
 import * as voyage from "~/server/voyage";
-import * as utils from "~/utils";
 
 describe("DELETE /api/voyage/delete", () => {
   it("should return 204", async () => {
@@ -9,8 +8,8 @@ describe("DELETE /api/voyage/delete", () => {
       return Promise.resolve({ id: "1" } as voyage.VoyageWithVessel);
     });
 
-    vi.spyOn(utils, "randomNetworkError").mockImplementation(() => {
-      return false;
+    vi.spyOn(global.Math, "random").mockImplementation(() => {
+      return 0;
     });
 
     const { req, res } = createMocks({
@@ -29,10 +28,6 @@ describe("DELETE /api/voyage/delete", () => {
     vi.spyOn(voyage, "deleteVoyage").mockImplementation(() => {
       return Promise.resolve(null);
     });
-
-    // vi.spyOn(utils, "randomNetworkError").mockImplementation(() => {
-    //   return false;
-    // });
 
     vi.spyOn(global.Math, "random").mockImplementation(() => {
       return 0;
