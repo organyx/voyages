@@ -1,8 +1,13 @@
 import { type Vessel } from "@prisma/client";
 import { prisma } from "./db";
 
-export const getAllVessels = async (): Promise<Vessel[]> => {
-  const voyages = await prisma.vessel.findMany();
+export const getAllVessels = async (): Promise<Vessel[] | null> => {
+  try {
+    const voyages = await prisma.vessel.findMany();
 
-  return voyages;
+    return voyages;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
