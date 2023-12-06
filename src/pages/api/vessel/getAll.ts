@@ -1,11 +1,9 @@
 import type { Vessel } from "@prisma/client";
 import type { NextApiHandler, NextApiResponse } from "next";
-import { prisma } from "~/server/db";
+import { getAllVessels } from "~/server/vessel";
 
-type ReturnType = Vessel[];
-
-const handler: NextApiHandler = async (_, res: NextApiResponse<ReturnType>) => {
-  const voyages = await prisma.vessel.findMany();
+const handler: NextApiHandler = async (_, res: NextApiResponse<Vessel[]>) => {
+  const voyages = await getAllVessels();
 
   res.status(200).json(voyages);
 };
