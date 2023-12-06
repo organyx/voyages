@@ -38,6 +38,8 @@ export function VoyageForm({ setIsSheetOpen }: VoyageFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      scheduledDeparture: '',
+      scheduledArrival: '',
       portOfLoading: '',
       portOfDischarge: '',
       vesselId: '',
