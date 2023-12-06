@@ -13,7 +13,8 @@ const handler: NextApiHandler = async (
       return;
     }
     // randomly fail the delete request
-    const maybe = randomNetworkError();
+    const maybe = Math.round(Math.random());
+    // const maybe = randomNetworkError();
     if (maybe) {
       res.status(400).end();
       return;

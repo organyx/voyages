@@ -30,8 +30,12 @@ describe("DELETE /api/voyage/delete", () => {
       return Promise.resolve(null);
     });
 
-    vi.spyOn(utils, "randomNetworkError").mockImplementation(() => {
-      return false;
+    // vi.spyOn(utils, "randomNetworkError").mockImplementation(() => {
+    //   return false;
+    // });
+
+    vi.spyOn(global.Math, "random").mockImplementation(() => {
+      return 0;
     });
 
     const { req, res } = createMocks({
