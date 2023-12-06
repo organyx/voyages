@@ -13,7 +13,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Badge } from '../ui/badge'
 
 
-const formSchema = z.object({
+export const formSchema = z.object({
   scheduledDeparture: z.string({ required_error: 'Departure is required' }).min(3).max(50),
   scheduledArrival: z.string({ required_error: 'Arrival is required' }).min(3).max(50),
   portOfLoading: z.string({ required_error: 'Port of loading is required' }).min(3).max(50),
