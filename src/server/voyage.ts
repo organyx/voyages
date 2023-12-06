@@ -5,15 +5,20 @@ export type VoyageWithVessel = Voyage & { vessel: Vessel } & {
   units: UnitType[];
 };
 
-export const getAllVoyages = async (): Promise<VoyageWithVessel[]> => {
-  const voyages = await prisma.voyage.findMany({
-    include: {
-      vessel: true,
-      units: true,
-    },
-  });
+export const getAllVoyages = async (): Promise<VoyageWithVessel[] | null> => {
+  try {
+    const voyages = await prisma.voyage.findMany({
+      include: {
+        vessel: true,
+        units: true,
+      },
+    });
 
-  return voyages;
+    return voyages;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
 
 export const deleteVoyage = async (id: string): Promise<Voyage | null> => {
