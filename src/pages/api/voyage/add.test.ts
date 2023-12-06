@@ -9,6 +9,14 @@ describe("POST /api/voyage/add", () => {
     });
     const { req, res } = createMocks({
       method: "POST",
+      body: {
+        vesselId: "123",
+        scheduledDeparture: new Date().toISOString(),
+        scheduledArrival: new Date().toISOString(),
+        portOfDischarge: "Port of Discharge",
+        portOfLoading: "Port of Loading",
+        unitTypes: ["1", "2", "3", "4", "5"],
+      },
     });
 
     await add(req, res);
@@ -22,6 +30,14 @@ describe("POST /api/voyage/add", () => {
     });
     const { req, res } = createMocks({
       method: "POST",
+      body: {
+        vesselId: "123",
+        scheduledDeparture: new Date().toISOString(),
+        scheduledArrival: new Date().toISOString(),
+        portOfDischarge: "Port of Discharge",
+        portOfLoading: "Port of Loading",
+        unitTypes: ["1", "2", "3", "4", "5"],
+      },
     });
 
     await add(req, res);
