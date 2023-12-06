@@ -18,3 +18,11 @@ export async function fetchData(path: string) {
 
   return response.json();
 }
+
+export function randomNetworkError(): boolean {
+  const maybe = Math.round(Math.random());
+  if (maybe) {
+    return true;
+  }
+  return false;
+}
