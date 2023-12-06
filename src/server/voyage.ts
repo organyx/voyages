@@ -1,5 +1,7 @@
 import { prisma } from "./db";
 import type { UnitType, Vessel, Voyage } from "@prisma/client";
+import type * as z from "zod";
+import { type formSchema } from "~/components/form/createVoyage";
 
 export type VoyageWithVessel = Voyage & { vessel: Vessel } & {
   units: UnitType[];
@@ -35,14 +37,7 @@ export const deleteVoyage = async (id: string): Promise<Voyage | null> => {
   }
 };
 
-type CreateVoyageSignature = {
-  vesselId: string;
-  portOfDischarge: string;
-  portOfLoading: string;
-  scheduledArrival: string;
-  scheduledDeparture: string;
-  unitTypes: string[];
-};
+type CreateVoyageSignature = z.infer<typeof formSchema>;
 
 export const createVoyage = async ({
   vesselId,
