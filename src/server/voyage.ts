@@ -42,21 +42,25 @@ export const createVoyage = async ({
   scheduledArrival,
   scheduledDeparture,
   unitTypes,
-}: CreateVoyageSignature): Promise<Voyage> => {
-  const newVoyage = await prisma.voyage.create({
-    data: {
-      vesselId,
-      portOfDischarge,
-      portOfLoading,
-      scheduledArrival: new Date(scheduledArrival),
-      scheduledDeparture: new Date(scheduledDeparture),
-      units: {
-        connect: unitTypes.map((unitTypeId: string) => ({
-          id: unitTypeId,
-        })),
+}: CreateVoyageSignature): Promise<Voyage | null> => {
+  try {
+    const newVoyage = await prisma.voyage.create({
+      data: {
+        vesselId,
+        portOfDischarge,
+        portOfLoading,
+        scheduledArrival: new Date(scheduledArrival),
+        scheduledDeparture: new Date(scheduledDeparture),
+        units: {
+          connect: unitTypes.map((unitTypeId: string) => ({
+            id: unitTypeId,
+          })),
+        },
       },
-    },
-  });
-
-  return newVoyage;
+    });
+    return newVoyage;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
 };
