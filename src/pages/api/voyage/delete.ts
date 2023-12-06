@@ -1,5 +1,6 @@
 import type { NextApiHandler, NextApiResponse, NextApiRequest } from "next";
 import { deleteVoyage } from "~/server/voyage";
+import { randomNetworkError } from "~/utils";
 
 const handler: NextApiHandler = async (
   req: NextApiRequest,
@@ -12,7 +13,7 @@ const handler: NextApiHandler = async (
       return;
     }
     // randomly fail the delete request
-    const maybe = Math.round(Math.random());
+    const maybe = randomNetworkError();
     if (maybe) {
       res.status(400).end();
       return;
