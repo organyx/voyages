@@ -92,7 +92,7 @@ export default function Home() {
                 <TableCell headers="portOfDischarge">{voyage.portOfDischarge}</TableCell>
                 <TableCell headers="vessel">{voyage.vessel.name}</TableCell>
                 <TableCell headers="unitTypes">
-                  <Popover>
+                  {voyage.units.length > 0 ? (<Popover>
                     <PopoverTrigger><Badge>{voyage.units.length}</Badge></PopoverTrigger>
                     <PopoverContent>
                       <ul>
@@ -101,7 +101,9 @@ export default function Home() {
                         )}
                       </ul>
                     </PopoverContent>
-                  </Popover>
+                  </Popover>)
+                    :
+                    <Badge>0</Badge>}
                 </TableCell>
                 <TableCell headers="delete">
                   <Button
