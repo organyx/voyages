@@ -1,4 +1,4 @@
-import { FieldErrors, useForm } from 'react-hook-form'
+import { type FieldErrors, useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '../ui/form'
@@ -10,6 +10,7 @@ import { fetchData } from '~/utils'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select'
 import { toast } from '../ui/use-toast'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
+import { Badge } from '../ui/badge'
 
 
 const formSchema = z.object({
@@ -37,6 +38,8 @@ export function VoyageForm({ setIsSheetOpen }: VoyageFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      scheduledDeparture: '',
+      scheduledArrival: '',
       portOfLoading: '',
       portOfDischarge: '',
       vesselId: '',
@@ -110,6 +113,8 @@ export function VoyageForm({ setIsSheetOpen }: VoyageFormProps) {
   function onError(errors: FieldErrors<FormValues>) {
     console.error(errors)
   }
+
+  const selectedUnitTypes = form.watch('unitTypes');
 
   return (
     <Form {...form}>
@@ -213,12 +218,12 @@ export function VoyageForm({ setIsSheetOpen }: VoyageFormProps) {
           name="unitTypes"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Unit Types</FormLabel>
+              <FormLabel>Unit Types <Badge>{new Set(selectedUnitTypes).size}</Badge></FormLabel>
               <FormControl >
                 <DropdownMenu>
                   <DropdownMenuTrigger className='flex h-9 items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 w-[180px]'>Select Unit</DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuLabel>Unit Types</DropdownMenuLabel>
+                    <DropdownMenuLabel>Unit Types </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     {unitTypes?.map((unitType) => (
                       <DropdownMenuItem key={unitType.id} onClick={() => {

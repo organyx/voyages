@@ -1,18 +1,15 @@
-import type { UnitType, Vessel, Voyage } from "@prisma/client";
 import type { NextApiHandler, NextApiResponse } from "next";
-import { prisma } from "~/server/db";
+import { type VoyageWithVessel, getAllVoyages } from "~/server/voyage";
 
-export type ReturnType = (Voyage & { vessel: Vessel } & {
-  units: UnitType[];
-})[];
+const handler: NextApiHandler = async (
+  _,
+  res: NextApiResponse<VoyageWithVessel[] | { message: string }>
+) => {
+  const voyages = await getAllVoyages();
 
-const handler: NextApiHandler = async (_, res: NextApiResponse<ReturnType>) => {
-  const voyages = await prisma.voyage.findMany({
-    include: {
-      vessel: {},
-      units: {},
-    },
-  });
+  if (!voyages) {
+    return res.status(500).json({ message: "Error fetching voyages" });
+  }
 
   res.status(200).json(voyages);
 };

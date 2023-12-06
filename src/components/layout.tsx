@@ -23,7 +23,7 @@ export default function Layout({ children }: Props) {
             <SheetTrigger asChild>
               <Button>Create Voyage</Button>
             </SheetTrigger>
-            <SheetContent>
+            <SheetContent className="overflow-auto">
               <SheetHeader>
                 Create Voyage
               </SheetHeader>
