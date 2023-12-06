@@ -16,14 +16,18 @@ export const getAllVoyages = async (): Promise<VoyageWithVessel[]> => {
   return voyages;
 };
 
-export const deleteVoyage = async (id: string): Promise<Voyage> => {
-  const deletedVoyage = await prisma.voyage.delete({
-    where: {
-      id,
-    },
-  });
-
-  return deletedVoyage;
+export const deleteVoyage = async (id: string): Promise<Voyage | null> => {
+  try {
+    const deletedVoyage = await prisma.voyage.delete({
+      where: {
+        id,
+      },
+    });
+    return deletedVoyage;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
 };
 
 type CreateVoyageSignature = {
