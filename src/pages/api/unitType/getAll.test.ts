@@ -1,6 +1,6 @@
 import { createMocks } from "node-mocks-http";
 import getAll from "./getAll";
-import * as unitType from "../../../server/unitType";
+import * as unitType from "~/server/unitType";
 
 describe("GET /api/unitType/getAll", () => {
   it("should return 200 OK", async () => {
